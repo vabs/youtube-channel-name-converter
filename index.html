@@ -1,0 +1,155 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <!-- Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Meta Tags -->
+    <meta name="description" content="Convert your Youtube Username to Channel ID" />
+    <meta name="keywords" content="youtube, username, channelid, channel, id, converter" />
+    <meta name="author" content="vabs">
+    <meta name="page-topic" content="Youtube Username to Channel ID Converter">
+
+    <!-- Facebook Metadata -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://vabs.github.io/youtube-channel-name-converter/" />
+    <meta property="og:site_name" content="Youtube Username to Channel ID Converter" />
+    <meta property="og:title" content="Youtube Username to Channel ID Converter" />
+    <meta property="og:description" content="Convert your Youtube Username to Channel ID" />
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="website">
+    <meta name="twitter:url" content="http://vabs.github.io/youtube-channel-name-converter/">
+    <meta name="twitter:title" content="Youtube Username to Channel ID Converter">
+    <meta name="twitter:description" content="Convert your Youtube Username to Channel ID">
+    <meta name="twitter:creator" content="vabs">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="images/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- IE Force -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css" media="screen">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+
+    <title>Youtube Username to Channel ID Converter</title>
+    <script type="application/javascript">
+        var doNotTrack = false;
+        if (!doNotTrack) {
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-42522319-5', 'auto');
+            
+            ga('send', 'pageview');
+        }
+    </script>
+    
+    <script type="text/javascript">
+        function clean() {
+            document.getElementById('error').classList.add('d-none');
+            document.getElementById('response').classList.add('d-none');
+        }
+        function success(xhr) {
+            document.getElementById('channelId').innerHTML = `${xhr.response}`;
+            document.getElementById('channelLink').innerHTML = `https://www.youtube.com/channel/${xhr.response}`;
+            document.getElementById('response').classList.remove('d-none');
+        }
+
+        function error(xhr) {
+            document.getElementById('errorMessage').innerHTML = `Error ${xhr.status}: ${xhr.statusText}`;
+            document.getElementById('error').classList.remove('d-none');
+        }
+
+        function handleClick(channelName) {
+            clean();
+            let url = new URL('https://us-central1-youtube-channel-converter.cloudfunctions.net/youtube-channel-name');
+            url.searchParams.set('channelname', channelName);
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+            xhr.onload = function() {
+                if (xhr.status != 200) { 
+                  error(xhr);
+                } else {
+                  if(xhr.response == '') {
+                    error(xhr);
+                  } else {
+                    success(xhr);
+                  }
+                }
+            };
+            xhr.onerror = function() {
+                console.log("Request failed");
+            };
+            return false;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container pt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <header>
+                    <h1>Youtube Username to Channel ID Converter
+                        <br />
+                        <iframe
+                            src="https://ghbtns.com/github-btn.html?user=vabs&repo=youtube-channel-name-converter&type=star&count=true&size=large"
+                            height="30" width="150" frameborder="0"></iframe>
+                    </h1>
+                </header>
+            </div>
+        </div>
+        <div class="row m-pt">
+            <div class="col-md-8 offset-md-2">
+                <section>
+                    <h2>Convert your Youtube Username to Channel ID</h2>
+                </section>
+            </div>
+        </div>
+        <div class="row m-pt">
+            <div class="col-md-8 offset-md-2">
+                <form onSubmit="return handleClick(youtubeChannelName.value)">
+                    <div class="form-group">
+                        <input type="text" name="youtubeChannelName" class="form-control" id="youtubeChannelName"
+                            placeholder="Youtube Channel Name">
+                    </div>
+                    <button type="submit" class="btn btn-light">☆ Get Channel ID</button>
+                </form>
+            </div>
+        </div>
+        <div class="row m-pt d-none" id="response">
+            <div class="col-md-8 offset-md-2 border p-4">
+                <label>Channel ID</label>
+                <div id="channelId" class="alert alert-success">
+                    A simple success alert—check it out!
+                </div>
+                <label>Channel Link</label>
+                <div id="channelLink" class="alert alert-success">
+                    A simple success alert—check it out!
+                </div>
+            </div>
+        </div>
+        <div class="row m-pt d-none" id="error">
+                <div class="col-md-8 offset-md-2 border border-danger p-4">
+                    <label>Error</label>
+                    <div id="errorMessage" class="alert alert-danger"></div>
+                </div>
+            </div>
+    </div>
+</body>
+
+</html>
