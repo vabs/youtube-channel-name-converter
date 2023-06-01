@@ -78,8 +78,9 @@
 
         function handleClick(channelInfo, conversionType) {
             clean();
-            console.log(channelInfo, conversionType)
-
+            
+            if(channelInfo === '') return false;
+            
             let url = new URL('https://us-central1-youtube-channel-converter.cloudfunctions.net/channel-name-converter');
             url.searchParams.set('channelInfo', channelInfo);
             url.searchParams.set('conversionType', conversionType);
